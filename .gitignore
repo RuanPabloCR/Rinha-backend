@@ -1,0 +1,21 @@
+# R
+*.Rhistory
+*.RData
+*.Rproj
+.Rproj.user/
+.Rhistory
+.Ruserdata
+
+# Logs
+*.log
+
+# Docker
+*.env
+docker-compose.override.yml
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# Redis dump
+dump.rdb

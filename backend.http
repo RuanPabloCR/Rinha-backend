@@ -1,0 +1,16 @@
+@port = 9999
+
+
+POST http://localhost:9999/payments
+Content-Type: application/json
+
+{
+    "correlationId": "{{$guid}}",
+    "amount": 19.90
+}
+
+###
+GET http://localhost:9999/payments-summary 
+
+###
+GET http://localhost:9999/payments-summary?from=2025-07-04T00:16:15.912Z&to=2025-07-04T00:17:15.690Z
