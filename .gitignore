@@ -13,9 +13,10 @@
 *.env
 docker-compose.override.yml
 
-# VS Code
+
 .vscode/
 *.code-workspace
 
-# Redis dump
 dump.rdb
+
+/Payments
