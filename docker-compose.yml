@@ -12,10 +12,11 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.1"
-          memory: "20MB"
+          cpus: "0.05"
+          memory: "10MB"
     restart: unless-stopped
     networks:
+      - backend
       - payment-processor
 
   api1:
@@ -23,32 +24,34 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: r-api-1
+    command: ["/app/wait-for-redis.sh"]
     depends_on:
       - redis
     deploy:
       resources:
         limits:
-          cpus: "0.6"
-          memory: "120MB"
+          cpus: "0.35"
+          memory: "70MB"
     restart: unless-stopped
     networks:
-      - payment-processor
+      - backend
 
   api2:
     build:
       context: .
       dockerfile: Dockerfile
     container_name: r-api-2
+    command: ["/app/wait-for-redis.sh"]
     depends_on:
       - redis
     deploy:
       resources:
         limits:
-          cpus: "0.6"
-          memory: "120MB"
+          cpus: "0.35"
+          memory: "70MB"
     restart: unless-stopped
     networks:
-      - payment-processor
+      - backend
 
   redis:
     image: redis:7-alpine
@@ -56,12 +59,50 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.2"
-          memory: "90MB"
+          cpus: "0.15"
+          memory: "60MB"
     restart: unless-stopped
     networks:
+      - backend
+
+  worker1:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: r-worker-1
+    command: ["/app/start-worker.sh"]
+    depends_on:
+      - redis
+    deploy:
+      resources:
+        limits:
+          cpus: "0.325"
+          memory: "75MB"
+    restart: unless-stopped
+    networks:
+      - backend
+      - payment-processor
+
+  worker2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: r-worker-2
+    command: ["/app/start-worker.sh"]
+    depends_on:
+      - redis
+    deploy:
+      resources:
+        limits:
+          cpus: "0.325"
+          memory: "75MB"
+    restart: unless-stopped
+    networks:
+      - backend
       - payment-processor
 
 networks:
+  backend:
+    driver: bridge
   payment-processor:
     external: true
