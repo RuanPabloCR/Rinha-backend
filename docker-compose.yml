@@ -2,6 +2,7 @@ services:
   nginx:
     image: nginx:alpine
     container_name: nginx-lb
+    platform: linux/amd64
     ports:
       - "9999:9999"
     volumes:
@@ -20,10 +21,9 @@ services:
       - payment-processor
 
   api1:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: ruanpcr/rinha-backend:latest
     container_name: r-api-1
+    platform: linux/amd64
     command: ["/app/wait-for-redis.sh"]
     depends_on:
       - redis
@@ -31,16 +31,15 @@ services:
       resources:
         limits:
           cpus: "0.35"
-          memory: "70MB"
+          memory: "68MB"
     restart: unless-stopped
     networks:
       - backend
 
   api2:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: ruanpcr/rinha-backend:latest
     container_name: r-api-2
+    platform: linux/amd64
     command: ["/app/wait-for-redis.sh"]
     depends_on:
       - redis
@@ -48,7 +47,7 @@ services:
       resources:
         limits:
           cpus: "0.35"
-          memory: "70MB"
+          memory: "68MB"
     restart: unless-stopped
     networks:
       - backend
@@ -56,20 +55,20 @@ services:
   redis:
     image: redis:7-alpine
     container_name: redis
+    platform: linux/amd64
     deploy:
       resources:
         limits:
           cpus: "0.15"
-          memory: "60MB"
+          memory: "54MB"
     restart: unless-stopped
     networks:
       - backend
 
   worker1:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: ruanpcr/rinha-backend:latest
     container_name: r-worker-1
+    platform: linux/amd64
     command: ["/app/start-worker.sh"]
     depends_on:
       - redis
@@ -84,10 +83,9 @@ services:
       - payment-processor
 
   worker2:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: ruanpcr/rinha-backend:latest
     container_name: r-worker-2
+    platform: linux/amd64
     command: ["/app/start-worker.sh"]
     depends_on:
       - redis

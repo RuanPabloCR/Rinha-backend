@@ -11,7 +11,6 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Instala todas as dependências (plumber para API, httr2 para worker)
 RUN R -e "install.packages(c('plumber', 'httr2', 'jsonlite', 'redux', 'uuid', 'lubridate'), repos='https://cloud.r-project.org', quiet = FALSE)"
 
 COPY src/api.R /app/api.R
