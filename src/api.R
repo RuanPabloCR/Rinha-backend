@@ -64,9 +64,6 @@ payments_summary <- function(from = NULL, to = NULL) {
             from_epoch <- as.numeric(from_time)
             to_epoch <- as.numeric(to_time)
             
-            #cat("DEBUG: Buscando entre timestamps:", from_epoch, "e", to_epoch, "\n")
-            
-            # Buscar dados do Redis por range de timestamp
             entries <- redis$ZRANGEBYSCORE("payments:logs", from_epoch, to_epoch)
         }
         
@@ -99,11 +96,11 @@ payments_summary <- function(from = NULL, to = NULL) {
         result <- list(
             default = list(
                 totalRequests = jsonlite::unbox(total_req_default),
-                totalAmount = jsonlite::unbox(total_amt_default / 100.0)  # Converter centavos para decimais
+                totalAmount = jsonlite::unbox(total_amt_default / 100.0)
             ),
             fallback = list(
                 totalRequests = jsonlite::unbox(total_req_fallback),
-                totalAmount = jsonlite::unbox(total_amt_fallback / 100.0)  # Converter centavos para decimais
+                totalAmount = jsonlite::unbox(total_amt_fallback / 100.0)
             )
         )
         
