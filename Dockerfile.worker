@@ -1,0 +1,32 @@
+# Dockerfile.worker
+FROM mcr.microsoft.com/dotnet/aspnet:9.0-alpine AS base
+WORKDIR /app
+
+FROM mcr.microsoft.com/dotnet/sdk:9.0-alpine AS build
+WORKDIR /src
+
+# Copiar arquivos do projeto worker
+COPY ["src/worker/src/ProjetoComC#.csproj", "worker/"]
+RUN dotnet restore "worker/ProjetoComC#.csproj"
+
+# Copiar todo o código fonte do worker
+COPY src/worker/src/ ./worker/
+WORKDIR "/src/worker"
+
+# Build da aplicação
+RUN dotnet build "ProjetoComC#.csproj" -c Release -o /app/build
+
+FROM build AS publish
+RUN dotnet publish "ProjetoComC#.csproj" -c Release -o /app/publish
+
+FROM base AS final
+WORKDIR /app
+
+RUN apk add --no-cache curl
+
+COPY --from=publish /app/publish .
+
+ENV ASPNETCORE_ENVIRONMENT=Production
+ENV REDIS_HOST=redis:6379
+
+ENTRYPOINT ["dotnet", "ProjetoComC#.dll"]

@@ -13,7 +13,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.1"
+          cpus: "0.1"     # Nginx mínimo necessário
           memory: "10MB"
     restart: unless-stopped
     networks:
@@ -21,7 +21,9 @@ services:
       - payment-processor
 
   api1:
-    image: ruanpcr/rinha-backend:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: r-api-1
     platform: linux/amd64
     command: ["/app/wait-for-redis.sh"]
@@ -30,14 +32,16 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.35"
-          memory: "68MB"
+          cpus: "0.55"    # REVERTIDO: config que funcionava
+          memory: "105MB"  # REVERTIDO: config que funcionava
     restart: unless-stopped
     networks:
       - backend
 
   api2:
-    image: ruanpcr/rinha-backend:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: r-api-2
     platform: linux/amd64
     command: ["/app/wait-for-redis.sh"]
@@ -46,8 +50,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.35"
-          memory: "68MB"
+          cpus: "0.55"    # REVERTIDO: config que funcionava
+          memory: "105MB"  # REVERTIDO: config que funcionava
     restart: unless-stopped
     networks:
       - backend
@@ -59,41 +63,27 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.1"
-          memory: "54MB"
+          cpus: "0.1"     # REVERTIDO: config que funcionava
+          memory: "40MB"  # REVERTIDO: config que funcionava
     restart: unless-stopped
     networks:
       - backend
 
-  worker1:
-    image: ruanpcr/rinha-backend:latest
-    container_name: r-worker-1
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
+    container_name: worker
     platform: linux/amd64
-    command: ["/app/start-worker.sh"]
     depends_on:
       - redis
+    environment:
+      - REDIS_HOST=redis:6379
     deploy:
       resources:
         limits:
-          cpus: "0.3"
-          memory: "75MB"
-    restart: unless-stopped
-    networks:
-      - backend
-      - payment-processor
-
-  worker2:
-    image: ruanpcr/rinha-backend:latest
-    container_name: r-worker-2
-    platform: linux/amd64
-    command: ["/app/start-worker.sh"]
-    depends_on:
-      - redis
-    deploy:
-      resources:
-        limits:
-          cpus: "0.3"
-          memory: "75MB"
+          cpus: "0.2"    # REVERTIDO: config que funcionava
+          memory: "90MB" # REVERTIDO: config que funcionava
     restart: unless-stopped
     networks:
       - backend

@@ -6,6 +6,27 @@
 .Rhistory
 .Ruserdata
 
+# .NET
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.dll
+*.exe
+*.pdb
+*.deps.json
+*.runtimeconfig.json
+*.runtimeconfig.dev.json
+project.lock.json
+project.fragment.lock.json
+artifacts/
+**/Properties/launchSettings.json
+.vs/
+*.swp
+*.swo
+*~
+
 # Logs
 *.log
 

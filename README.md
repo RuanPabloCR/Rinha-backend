@@ -6,5 +6,4 @@
 - **Database**: Redis
 - **Load Balancer**: nginx
 - **Conteinerização**: Docker
-
-Com o objetivo de aprender mais sobre R, conceitos como Load Balancer, Proxy reverso, Queues...
+- **Worker**: Feito em .NET 9.0

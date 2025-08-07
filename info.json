@@ -6,16 +6,20 @@
     ],
     "source-code-repo": "https://github.com/RuanPabloCR/Rinha-backend",
     "langs": [
-        "R"
+        "R",
+        "C#"
     ],
     "storages": [
         "Redis"
     ],
-    "messaging": [],
+    "messaging": [
+        "Redis"
+    ],
     "load-balancers": [
         "Nginx"
     ],
     "other-technologies": [
-        "Plumber"
+        "Plumber",
+        "dotnet"
     ]
 }
